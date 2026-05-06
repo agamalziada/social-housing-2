@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Egypt Social Housing Prices 2014–2026</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: #ffffff;
+    color: #2c2c2a;
+    padding: 20px 24px 16px;
+  }
+  .label-row {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #888780;
+    margin-bottom: 4px;
+  }
+  .chart-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #2c2c2a;
+    line-height: 1.35;
+    margin-bottom: 3px;
+  }
+  .chart-subtitle {
+    font-size: 12px;
+    color: #5f5e5a;
+    margin-bottom: 14px;
+  }
+  .legend {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .legend span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: #5f5e5a;
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .chart-wrap {
+    position: relative;
+    width: 100%;
+    height: 240px;
+  }
+  .source {
+    font-size: 10px;
+    color: #888780;
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+  @media (prefers-color-scheme: dark) {
+    body { background: #1a1a18; color: #d3d1c7; }
+    .chart-title { color: #d3d1c7; }
+    .chart-subtitle, .legend span { color: #b4b2a9; }
+    .source { color: #888780; }
+  }
+</style>
+</head>
+<body>
+  <p class="label-row">Zawia3 · Data chart 1 of 3</p>
+  <p class="chart-title">Price of a 90 sqm social housing unit, 2014–2026</p>
+  <p class="chart-subtitle">Maximum announced price per offering round, Egyptian pounds (thousands)</p>
+  <div class="legend">
+    <span><span class="legend-dot" style="background:#378ADD;"></span>Price per offering</span>
+    <span><span class="legend-dot" style="background:#D85A30;"></span>2026 — crossed 1M threshold</span>
+  </div>
+  <div class="chart-wrap">
+    <canvas id="c1" role="img" aria-label="Bar chart showing Egyptian social housing prices rising from 135,000 pounds in 2014 to over 1,000,000 pounds in 2026">
+      2014: 135,000 EGP; Apr 2015: 154,000 EGP; 2016: 225,000 EGP; 2018: 220,000 EGP; 2024: 700,000 EGP; 2025: 900,000 EGP; 2026: 1,000,000+ EGP.
+    </canvas>
+  </div>
+  <p class="source">
+    2016 figure reflects post-devaluation peak. 2024 price is for 36-month delivery units in new cities.<br>
+    Source: Al-Masry Al-Youm, Masrawy, Youm7, El-Watan News, Ministry of Housing announcements.
+  </p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+  const dk = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const tc = dk ? '#b4b2a9' : '#5f5e5a';
+  const gc = dk ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)';
+  const blue  = dk ? '#85B7EB' : '#378ADD';
+  const coral = dk ? '#F0997B' : '#D85A30';
+
+  const data   = [135, 154, 225, 220, 700, 900, 1000];
+  const labels = ['2014', 'Apr 2015', '2016', '2018', '2024', '2025', '2026'];
+  const colors = data.map((_, i) => i === data.length - 1 ? coral : blue);
+
+  new Chart(document.getElementById('c1'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{ data, backgroundColor: colors, borderWidth: 0, borderRadius: 4 }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: dk ? '#2c2c2a' : '#ffffff',
+          borderColor: dk ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.1)',
+          borderWidth: 1,
+          titleColor: dk ? '#d3d1c7' : '#2c2c2a',
+          bodyColor: dk ? '#b4b2a9' : '#5f5e5a',
+          padding: 10,
+          callbacks: {
+            title: ctx => ctx[0].label,
+            label: ctx => {
+              const egp = ctx.raw * 1000;
+              const usd = Math.round(egp / 52);
+              return [
+                'EGP: ' + egp.toLocaleString() + ' Egyptian pounds',
+                'USD: $' + usd.toLocaleString()
+              ];
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: tc, font: { size: 11 }, autoSkip: false, maxRotation: 0 },
+          grid: { display: false },
+          border: { color: gc }
+        },
+        y: {
+          ticks: {
+            color: tc,
+            font: { size: 11 },
+            callback: v => v >= 1000 ? '1M+' : v + 'k'
+          },
+          grid: { color: gc },
+          border: { display: false }
+        }
+      }
+    }
+  });
+</script>
+</body>
+</html>
