@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>توزيع إنتاج الوحدات السكنية حسب القطاع في مصر</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', Tahoma, 'Arabic Typesetting', Arial, sans-serif;
+  background: #ffffff;
+  color: #2c2c2a;
+  padding: 20px 24px 16px;
+  direction: rtl;
+}
+.label-row { font-size: 10px; font-weight: 600; color: #888780; margin-bottom: 4px; }
+.chart-title { font-size: 15px; font-weight: 700; color: #2c2c2a; line-height: 1.4; margin-bottom: 3px; }
+.chart-subtitle { font-size: 12px; color: #5f5e5a; margin-bottom: 16px; }
+.stat-row { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.stat-card { background: #f1efe8; border-radius: 8px; padding: 10px 14px; flex: 1; min-width: 90px; }
+.stat-value { font-size: 22px; font-weight: 700; line-height: 1; margin-bottom: 3px; }
+.stat-label { font-size: 11px; color: #5f5e5a; line-height: 1.35; }
+.chart-body { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+.donut-wrap { position: relative; width: 200px; height: 200px; flex-shrink: 0; }
+.legend { display: flex; flex-direction: column; gap: 11px; flex: 1; min-width: 150px; }
+.legend-item { display: flex; align-items: center; gap: 8px; }
+.ldot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.legend-label { font-size: 12px; color: #5f5e5a; }
+.legend-pct { font-size: 13px; font-weight: 700; color: #2c2c2a; }
+.source { font-size: 10px; color: #888780; margin-top: 12px; line-height: 1.5; text-align: right; }
+@media (prefers-color-scheme: dark) {
+  body { background: #1a1a18; color: #d3d1c7; }
+  .chart-title { color: #d3d1c7; }
+  .chart-subtitle, .legend-label { color: #b4b2a9; }
+  .stat-card { background: #2c2c2a; }
+  .stat-label { color: #b4b2a9; }
+  .legend-pct { color: #d3d1c7; }
+  .source { color: #888780; }
+}
+</style>
+</head>
+<body>
+<p class="label-row">زاوية ثالثة · رسم بياني 2 من 3</p>
+<p class="chart-title">توزيع إنتاج الوحدات حسب القطاع.. من يسيطر على سوق الإسكان في مصر؟</p>
+<p class="chart-subtitle">86% من الإسكان في مصر خارج المنظومة الرسمية — إجمالي ~1.165 مليون وحدة في 2024</p>
+
+<div class="stat-row">
+  <div class="stat-card">
+    <div class="stat-value" style="color:#D85A30;">86%</div>
+    <div class="stat-label">القطاع غير الرسمي<br>~1,000,000 وحدة</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" style="color:#378ADD;">7%</div>
+    <div class="stat-label">القطاع العام<br>82,700 وحدة</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" style="color:#888780;">6.5%</div>
+    <div class="stat-label">القطاع الخاص الرسمي<br>76,200 وحدة</div>
+  </div>
+</div>
+
+<div class="chart-body">
+  <div class="donut-wrap">
+    <canvas id="c2" role="img" aria-label="رسم بياني دائري يظهر أن القطاع غير الرسمي ينتج 86% من الوحدات السكنية في مصر، والقطاع العام 7%، والقطاع الخاص الرسمي 6.5%">
+      القطاع غير الرسمي: 86%، ~مليون وحدة. القطاع العام: 7%، 82,700 وحدة. القطاع الخاص الرسمي: 6.5%، 76,200 وحدة.
+    </canvas>
+  </div>
+  <div class="legend" id="leg2"></div>
+</div>
+
+<p class="source">أدنى مستوى للإنتاج الرسمي خلال السنوات الخمس الأخيرة | المصدر: مرصد العمران — تقرير "من يبني الإسكان في مصر 2024" | رسم: زاوية ثالثة</p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const dk = window.matchMedia('(prefers-color-scheme: dark)').matches;
+const coral = dk ? '#F0997B' : '#D85A30';
+const blue  = dk ? '#85B7EB' : '#378ADD';
+const gray  = dk ? '#B4B2A9' : '#888780';
+
+const labels = ['القطاع غير الرسمي', 'القطاع العام', 'القطاع الخاص الرسمي'];
+const values = [86, 7, 6.5];
+const units  = ['~1,000,000 وحدة', '82,700 وحدة', '76,200 وحدة'];
+const colors = [coral, blue, gray];
+
+Chart.defaults.font.family = "'Segoe UI', Tahoma, Arial, sans-serif";
+
+new Chart(document.getElementById('c2'), {
+  type: 'doughnut',
+  data: {
+    labels,
+    datasets: [{
+      data: values,
+      backgroundColor: colors,
+      borderWidth: 3,
+      borderColor: dk ? '#1a1a18' : '#ffffff',
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        rtl: true,
+        backgroundColor: dk ? '#2c2c2a' : '#ffffff',
+        borderColor: dk ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.1)',
+        borderWidth: 1,
+        titleColor: dk ? '#d3d1c7' : '#2c2c2a',
+        bodyColor: dk ? '#b4b2a9' : '#5f5e5a',
+        padding: 10,
+        callbacks: {
+          label: ctx => [
+            ' النسبة: ' + ctx.raw + '%',
+            ' العدد: ' + units[ctx.dataIndex]
+          ]
+        }
+      }
+    },
+    cutout: '60%'
+  }
+});
+
+const leg = document.getElementById('leg2');
+labels.forEach((lbl, i) => {
+  leg.innerHTML += `<div class="legend-item">
+    <span class="ldot" style="background:${colors[i]};"></span>
+    <span class="legend-label">${lbl}: <span class="legend-pct">${values[i]}%</span></span>
+  </div>`;
+});
+</script>
+</body>
+</html>

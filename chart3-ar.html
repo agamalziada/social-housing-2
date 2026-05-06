@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>من يمول الإسكان في مصر؟</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', Tahoma, 'Arabic Typesetting', Arial, sans-serif;
+  background: #ffffff;
+  color: #2c2c2a;
+  padding: 20px 24px 16px;
+  direction: rtl;
+}
+.label-row { font-size: 10px; font-weight: 600; color: #888780; margin-bottom: 4px; }
+.chart-title { font-size: 15px; font-weight: 700; color: #2c2c2a; line-height: 1.4; margin-bottom: 3px; }
+.chart-subtitle { font-size: 12px; color: #5f5e5a; margin-bottom: 16px; line-height: 1.5; }
+.chart-body { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+.donut-wrap { position: relative; width: 200px; height: 200px; flex-shrink: 0; }
+.legend { display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 160px; }
+.legend-item { display: flex; align-items: flex-start; gap: 8px; }
+.ldot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; margin-top: 2px; }
+.legend-text { display: flex; flex-direction: column; }
+.legend-label { font-size: 12px; color: #5f5e5a; }
+.legend-val { font-size: 13px; font-weight: 700; color: #2c2c2a; }
+.ext-box { margin-top: 16px; border-top: 0.5px solid rgba(0,0,0,0.1); padding-top: 14px; }
+.ext-title { font-size: 11px; font-weight: 600; color: #888780; margin-bottom: 8px; letter-spacing: 0.04em; }
+.ext-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.ext-card { background: #f1efe8; border-radius: 8px; padding: 9px 12px; flex: 1; min-width: 130px; }
+.ext-value { font-size: 15px; font-weight: 700; color: #185fa5; margin-bottom: 2px; }
+.ext-label { font-size: 10px; color: #5f5e5a; line-height: 1.4; }
+.source { font-size: 10px; color: #888780; margin-top: 12px; line-height: 1.5; text-align: right; }
+@media (prefers-color-scheme: dark) {
+  body { background: #1a1a18; color: #d3d1c7; }
+  .chart-title { color: #d3d1c7; }
+  .chart-subtitle, .legend-label { color: #b4b2a9; }
+  .legend-val { color: #d3d1c7; }
+  .ext-box { border-top-color: rgba(255,255,255,0.1); }
+  .ext-card { background: #2c2c2a; }
+  .ext-value { color: #85B7EB; }
+  .ext-label { color: #b4b2a9; }
+  .source { color: #888780; }
+}
+</style>
+</head>
+<body>
+<p class="label-row">زاوية ثالثة · رسم بياني 3 من 3</p>
+<p class="chart-title">من يمول الإسكان في مصر؟</p>
+<p class="chart-subtitle">البنك الدولي يقدّم 3.5 مليار دولار + 580 مليار جنيه من بنوك مصر وحكومة لملايين الوحدات السكنية</p>
+
+<div class="chart-body">
+  <div class="donut-wrap">
+    <canvas id="c3" role="img" aria-label="رسم بياني دائري يظهر توزيع تمويل الإسكان في مصر: الحكومة 390 مليار جنيه، البنك المركزي 135 مليار، تحالف بنوك 50 مليار، صندوق الإسكان 35 مليار، أخرى 9 مليار">
+      الحكومة: 390 مليار جنيه. البنك المركزي: 135 مليار جنيه. تحالف 11 بنكًا: 50 مليار جنيه. صندوق الإسكان: 35 مليار جنيه. أخرى: 9 مليار جنيه.
+    </canvas>
+  </div>
+  <div class="legend" id="leg3"></div>
+</div>
+
+<div class="ext-box">
+  <p class="ext-title">التمويل الخارجي — البنك الدولي</p>
+  <div class="ext-row">
+    <div class="ext-card">
+      <div class="ext-value">مليار دولار</div>
+      <div class="ext-label">قرض البنك الدولي 2015 — برنامج التمويل الإسكاني الشامل للنتائج</div>
+    </div>
+    <div class="ext-card">
+      <div class="ext-value">500 مليون دولار</div>
+      <div class="ext-label">تمويل إضافي مارس 2020 — توسيع صندوق الإسكان الاجتماعي</div>
+    </div>
+  </div>
+</div>
+
+<p class="source">المصدر: قاعدة بيانات SDG16، مجلس الأعمال الأمريكي المصري، البنك الدولي | رسم: زاوية ثالثة</p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const dk = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+const labels = ['الحكومة', 'البنك المركزي', 'تحالف 11 بنكًا', 'صندوق الإسكان', 'أخرى'];
+const values = [390e9, 135e9, 50e9, 35e9, 9001e6];
+const display = ['390 مليار جنيه', '135 مليار جنيه', '50 مليار جنيه', '35 مليار جنيه', '9 مليار جنيه'];
+const usdDisplay = ['$7.5 مليار', '$2.6 مليار', '$962 مليون', '$673 مليون', '$173 مليون'];
+
+const colors = dk
+  ? ['#85B7EB', '#5DCAA5', '#0C447C', '#FAC775', '#B4B2A9']
+  : ['#378ADD', '#1D9E75', '#042C53', '#BA7517', '#888780'];
+
+Chart.defaults.font.family = "'Segoe UI', Tahoma, Arial, sans-serif";
+
+new Chart(document.getElementById('c3'), {
+  type: 'doughnut',
+  data: {
+    labels,
+    datasets: [{
+      data: values,
+      backgroundColor: colors,
+      borderWidth: 3,
+      borderColor: dk ? '#1a1a18' : '#ffffff',
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        rtl: true,
+        backgroundColor: dk ? '#2c2c2a' : '#ffffff',
+        borderColor: dk ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.1)',
+        borderWidth: 1,
+        titleColor: dk ? '#d3d1c7' : '#2c2c2a',
+        bodyColor: dk ? '#b4b2a9' : '#5f5e5a',
+        padding: 10,
+        callbacks: {
+          title: ctx => ctx[0].label,
+          label: ctx => [
+            ' ' + display[ctx.dataIndex],
+            ' ' + usdDisplay[ctx.dataIndex]
+          ]
+        }
+      }
+    },
+    cutout: '60%'
+  }
+});
+
+const total = values.reduce((a, b) => a + b, 0);
+const leg = document.getElementById('leg3');
+labels.forEach((lbl, i) => {
+  const pct = Math.round(values[i] / total * 100);
+  leg.innerHTML += `<div class="legend-item">
+    <span class="ldot" style="background:${colors[i]};"></span>
+    <div class="legend-text">
+      <span class="legend-label">${lbl} (${pct}%)</span>
+      <span class="legend-val">${display[i]}</span>
+    </div>
+  </div>`;
+});
+</script>
+</body>
+</html>

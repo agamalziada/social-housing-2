@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تطور أسعار الإسكان الاجتماعي في مصر</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', Tahoma, 'Arabic Typesetting', Arial, sans-serif;
+  background: #ffffff;
+  color: #2c2c2a;
+  padding: 20px 24px 16px;
+  direction: rtl;
+}
+.label-row { font-size: 10px; font-weight: 600; color: #888780; margin-bottom: 4px; letter-spacing: 0.04em; }
+.chart-title { font-size: 15px; font-weight: 700; color: #2c2c2a; line-height: 1.4; margin-bottom: 3px; }
+.chart-subtitle { font-size: 12px; color: #5f5e5a; margin-bottom: 14px; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; justify-content: flex-start; }
+.legend span { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #5f5e5a; }
+.ldot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; flex-shrink: 0; }
+.chart-wrap { position: relative; width: 100%; height: 250px; }
+.source { font-size: 10px; color: #888780; margin-top: 10px; line-height: 1.5; text-align: right; }
+@media (prefers-color-scheme: dark) {
+  body { background: #1a1a18; color: #d3d1c7; }
+  .chart-title { color: #d3d1c7; }
+  .chart-subtitle, .legend span { color: #b4b2a9; }
+  .source { color: #888780; }
+}
+</style>
+</head>
+<body>
+<p class="label-row">زاوية ثالثة · رسم بياني 1 من 3</p>
+<p class="chart-title">تطور أسعار الإسكان الاجتماعي في مصر من 135 ألف إلى 1.25 مليون جنيه</p>
+<p class="chart-subtitle">الحد الأقصى للسعر المُعلن لشقة 90 متر في كل طرح، بالجنيه المصري</p>
+<div class="legend">
+  <span><span class="ldot" style="background:#7AB8D0;"></span>2014–2023</span>
+  <span><span class="ldot" style="background:#1D9E75;"></span>2024–2025 (قفزة الأسعار)</span>
+  <span><span class="ldot" style="background:#D85A30;"></span>2026 (تجاوز حاجز المليون)</span>
+</div>
+<div class="chart-wrap">
+  <canvas id="c1" role="img" aria-label="رسم بياني يظهر ارتفاع أسعار الإسكان الاجتماعي من 135 ألف جنيه في 2014 إلى 1.25 مليون جنيه في 2026">
+    2014: 135,000؛ 2015: 154,000؛ 2016: 184,000؛ 2018: 225,000؛ 2023: 270,000؛ 2024: 700,000؛ 2025: 900,000؛ 2026: 1,250,000 جنيه مصري.
+  </canvas>
+</div>
+<p class="source">المصدر: بيانات رسمية — المصري اليوم، مسراوي، يوم7، الوطن، وزارة الإسكان | رسم: زاوية ثالثة</p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const dk = window.matchMedia('(prefers-color-scheme: dark)').matches;
+const tc = dk ? '#b4b2a9' : '#5f5e5a';
+const gc = dk ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)';
+
+const labels = ['2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026'];
+const prices = [135000, 154000, 184000, null, 225000, 220000, 225000, 230000, 245000, 270000, 700000, 900000, 1250000];
+
+const getColor = l => {
+  if (l === '2026') return dk ? '#F0997B' : '#D85A30';
+  if (l === '2025' || l === '2024') return dk ? '#5DCAA5' : '#1D9E75';
+  return dk ? '#85C0D8' : '#7AB8D0';
+};
+
+Chart.defaults.font.family = "'Segoe UI', Tahoma, Arial, sans-serif";
+
+new Chart(document.getElementById('c1'), {
+  type: 'bar',
+  data: {
+    labels,
+    datasets: [{
+      data: prices,
+      backgroundColor: labels.map(getColor),
+      borderWidth: 0,
+      borderRadius: 3
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        rtl: true,
+        backgroundColor: dk ? '#2c2c2a' : '#ffffff',
+        borderColor: dk ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.1)',
+        borderWidth: 1,
+        titleColor: dk ? '#d3d1c7' : '#2c2c2a',
+        bodyColor: dk ? '#b4b2a9' : '#5f5e5a',
+        padding: 10,
+        callbacks: {
+          title: ctx => 'سنة ' + ctx[0].label,
+          label: ctx => {
+            if (!ctx.raw) return 'لا توجد بيانات';
+            const usd = Math.round(ctx.raw / 52).toLocaleString();
+            return [
+              'السعر: ' + ctx.raw.toLocaleString() + ' جنيه مصري',
+              'بالدولار: $' + usd
+            ];
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { color: tc, font: { size: 10 }, autoSkip: false, maxRotation: 45 },
+        grid: { display: false },
+        border: { color: gc }
+      },
+      y: {
+        ticks: {
+          color: tc,
+          font: { size: 11 },
+          callback: v => {
+            if (v === 0) return '0';
+            if (v >= 1000000) return (v / 1000000).toFixed(v % 1000000 === 0 ? 0 : 2) + ' مليون';
+            return (v / 1000) + ' ألف';
+          }
+        },
+        grid: { color: gc },
+        border: { display: false }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
