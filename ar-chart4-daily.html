@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>نصيب الطالب اليومي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--font:'Tajawal',sans-serif;--coral:#D85A30;--blue:#378ADD;--gray:#888780;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--font);direction:rtl;background:#fff;color:#2c2c2a;padding:20px 24px 16px;overflow:hidden;}
+  .header{border-right:3px solid var(--coral);padding-right:12px;margin-bottom:12px;opacity:0;transform:translateX(16px);animation:slideIn .5s ease forwards;}
+  .tag{font-size:10px;font-weight:700;letter-spacing:.07em;color:var(--gray);margin-bottom:3px;}
+  .title{font-size:16px;font-weight:700;line-height:1.4;margin-bottom:2px;}
+  .subtitle{font-size:12px;color:#5f5e5a;}
+  .callout{background:#f1efe8;border-right:3px solid var(--coral);padding:8px 12px;font-size:12px;color:#5f5e5a;line-height:1.6;margin:12px 0;font-style:italic;opacity:0;transform:translateY(10px);animation:fadeUp .5s .15s ease forwards;}
+  .row{margin-bottom:14px;opacity:0;transform:translateY(12px);}
+  .row:nth-child(1){animation:fadeUp .5s .3s ease forwards;}
+  .row:nth-child(2){animation:fadeUp .5s .45s ease forwards;}
+  .row-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
+  .row-label{font-size:13px;color:#5f5e5a;}
+  .row-val{font-size:17px;font-weight:700;}
+  .track{height:30px;background:#f1efe8;border-radius:5px;overflow:hidden;position:relative;}
+  .fill{height:100%;border-radius:5px;width:0;display:flex;align-items:center;padding-right:12px;font-size:13px;font-weight:700;color:#fff;transition:width 1.2s ease;}
+  .cards{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;opacity:0;transform:translateY(10px);animation:fadeUp .5s .65s ease forwards;}
+  .card{flex:1;min-width:90px;background:#f1efe8;border-radius:8px;padding:10px 12px;}
+  .cv{font-size:18px;font-weight:700;line-height:1;}
+  .cl{font-size:11px;color:#5f5e5a;margin-top:2px;}
+  .note{font-size:11px;color:#888780;line-height:1.6;margin-top:12px;padding:8px 12px;border-right:2px solid #f1efe8;opacity:0;animation:fadeUp .4s .8s ease forwards;}
+  .source{font-size:10px;color:var(--gray);margin-top:10px;text-align:right;opacity:0;transform:translateY(8px);animation:fadeUp .4s .9s ease forwards;}
+  @keyframes slideIn{to{opacity:1;transform:translateX(0);}}
+  @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+  @media(prefers-color-scheme:dark){body{background:#1a1a18;color:#d3d1c7;}.callout,.track,.card{background:#2c2c2a;}.callout,.row-label,.cl,.subtitle{color:#b4b2a9;}.note,.source{color:#888780;}}
+</style>
+</head>
+<body>
+  <div class="header">
+    <p class="tag">زاوية ثالثة · إنفوجرافيك ٤ من ٨</p>
+    <p class="title">نصيب الطالب اليومي من مخصصات التغذية المدرسية</p>
+    <p class="subtitle">مقارنةً بالسعر الرسمي للوجبة</p>
+  </div>
+  <div class="callout">"الدولة تُخصص 1.7 جنيه لإطعام طفل يوماً كاملاً — في حين أن سعر وجبة الروضة الرسمية وحدها 12.4 جنيه"</div>
+
+  <div id="bar1" class="row">
+    <div class="row-top"><span class="row-label">نصيب الطالب اليومي من المخصصات</span><span class="row-val" style="color:var(--coral);" id="v1">0</span></div>
+    <div class="track"><div class="fill" id="f1" style="background:var(--coral);"></div></div>
+  </div>
+  <div id="bar2" class="row">
+    <div class="row-top"><span class="row-label">سعر وجبة رياض الأطفال الرسمي</span><span class="row-val" style="color:var(--blue);" id="v2">0</span></div>
+    <div class="track"><div class="fill" id="f2" style="background:var(--blue);"></div></div>
+  </div>
+
+  <div class="cards">
+    <div class="card"><div class="cv" style="color:var(--coral);">1.7</div><div class="cl">جنيه / طالب / يوم</div></div>
+    <div class="card"><div class="cv">183</div><div class="cl">يوم دراسي / العام</div></div>
+    <div class="card"><div class="cv" style="color:var(--blue);">×7.3</div><div class="cl">فجوة عن وجبة الروضة</div></div>
+  </div>
+
+  <p class="note">الحساب: 7,000,000,000 ÷ (19,500,000 طالب × 183 يوم) ≈ 1.7 جنيه بعد التكاليف الإدارية</p>
+  <p class="source">المصدر: الخبير الاقتصادي إلهامي الميرغني / بوابة مصر للتحول الرقمي</p>
+
+<script>
+  /* animate bars after delay */
+  setTimeout(()=>{
+    /* bar1: 1.7 of 12.375 = 13.7% */
+    document.getElementById('f1').style.width='13.7%';
+    document.getElementById('f1').textContent='1.7 جنيه';
+    /* bar2: 100% */
+    document.getElementById('f2').style.width='100%';
+    document.getElementById('f2').textContent='12.375 جنيه';
+    /* count-up values */
+    let s=null;
+    function cu(ts){
+      if(!s)s=ts;
+      const p=Math.min((ts-s)/1000,1),e=1-Math.pow(1-p,3);
+      document.getElementById('v1').textContent=(e*1.7).toFixed(1)+' جنيه';
+      document.getElementById('v2').textContent=(e*12.375).toFixed(1)+' جنيه';
+      if(p<1)requestAnimationFrame(cu);
+      else{document.getElementById('v1').textContent='1.7 جنيه';document.getElementById('v2').textContent='12.375 جنيه';}
+    }
+    requestAnimationFrame(cu);
+  },350);
+</script>
+</body></html>

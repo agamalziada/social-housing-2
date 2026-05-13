@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تطور مخصصات التغذية المدرسية</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<!--
+  لإضافة خط منتصر العربي:
+  1. ضع ملف montaser-arabic.woff2 في نفس المجلد
+  2. أزل التعليق عن السطر التالي:
+  @font-face { font-family: 'MontaserArabic'; src: url('montaser-arabic.woff2') format('woff2'); font-weight: normal; font-style: normal; }
+  3. استبدل 'Tajawal' بـ 'MontaserArabic' في متغير --font أدناه
+-->
+<style>
+  :root { --font: 'Tajawal', sans-serif; --blue: #378ADD; --coral: #D85A30; --gray: #888780; --teal: #1D9E75; --amber: #BA7517; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); direction: rtl; background: #fff; color: #2c2c2a; padding: 20px 24px 16px; overflow: hidden; }
+
+  .header { border-right: 3px solid var(--blue); padding-right: 12px; margin-bottom: 12px; opacity: 0; transform: translateX(16px); animation: slideIn .5s ease forwards; }
+  .tag { font-size: 10px; font-weight: 700; letter-spacing: .07em; color: var(--gray); margin-bottom: 3px; }
+  .title { font-size: 16px; font-weight: 700; line-height: 1.4; margin-bottom: 2px; }
+  .subtitle { font-size: 12px; color: #5f5e5a; }
+
+  .callout { background: #f1efe8; border-right: 3px solid var(--coral); padding: 8px 12px; font-size: 12px; color: #5f5e5a; line-height: 1.6; margin: 12px 0; font-style: italic; opacity: 0; animation: fadeUp .5s .2s ease forwards; }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; justify-content: flex-end; margin-bottom: 8px; opacity: 0; animation: fadeUp .4s .3s ease forwards; }
+  .legend span { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #5f5e5a; flex-direction: row-reverse; }
+  .dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+
+  .chart-wrap { position: relative; width: 100%; height: 230px; opacity: 0; animation: fadeUp .5s .4s ease forwards; }
+  .source { font-size: 10px; color: var(--gray); margin-top: 10px; text-align: right; opacity: 0; animation: fadeUp .4s .7s ease forwards; }
+
+  @keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
+  @keyframes fadeUp  { to { opacity: 1; transform: translateY(0); } }
+  .callout, .legend, .chart-wrap, .source { transform: translateY(10px); }
+
+  @media (prefers-color-scheme: dark) {
+    body { background: #1a1a18; color: #d3d1c7; }
+    .callout { background: #2c2c2a; color: #b4b2a9; }
+    .subtitle, .legend span, .source { color: #b4b2a9; }
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <p class="tag">زاوية ثالثة · إنفوجرافيك ١ من ٨</p>
+    <p class="title">تطور مخصصات التغذية المدرسية في الموازنة المصرية</p>
+    <p class="subtitle">مليار جنيه — من 2023 حتى 2026/2027</p>
+  </div>
+  <div class="callout">"تراجعت المخصصات إلى 6.1 مليار في 2024/2025، ثم ارتفعت إلى 7 مليارات في موازنة 2026/2027 — لكن العجز الفعلي يكشف أن الرقم لا يزال دون الحاجة الحقيقية"</div>
+  <div class="legend">
+    <span><span class="dot" style="background:var(--blue);"></span>المخصصات (مليار جنيه)</span>
+    <span><span class="dot" style="background:var(--coral);"></span>سنة التراجع</span>
+  </div>
+  <div class="chart-wrap"><canvas id="c" role="img" aria-label="مخطط أعمدة: 6.6 مليار 2023، 6.1 مليار 2024/2025، 7 مليار 2026/2027">2023: 6.6؛ 2024/2025: 6.1؛ 2026/2027: 7 مليار جنيه</canvas></div>
+  <p class="source">المصدر: موازنة المواطن / وزير المالية أمام مجلس النواب</p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+  const dk = matchMedia('(prefers-color-scheme:dark)').matches;
+  const tc = dk?'#b4b2a9':'#5f5e5a', gc = dk?'rgba(255,255,255,.08)':'rgba(0,0,0,.07)';
+  const blue = dk?'#85B7EB':'#378ADD', coral = dk?'#F0997B':'#D85A30';
+  new Chart(document.getElementById('c'),{
+    type:'bar',
+    data:{ labels:['2023','2024/2025','2026/2027'], datasets:[{ data:[6.6,6.1,7], backgroundColor:[blue,coral,blue], borderWidth:0, borderRadius:5 }] },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      animation:{ duration:1000, easing:'easeOutQuart' },
+      plugins:{ legend:{display:false}, tooltip:{ backgroundColor:dk?'#2c2c2a':'#fff', borderColor:dk?'rgba(255,255,255,.1)':'rgba(0,0,0,.08)', borderWidth:1, titleColor:dk?'#d3d1c7':'#2c2c2a', bodyColor:tc, titleFont:{family:'Tajawal'}, bodyFont:{family:'Tajawal'}, padding:10, callbacks:{ label:ctx=>ctx.raw+' مليار جنيه' } } },
+      scales:{
+        x:{ ticks:{color:tc,font:{size:12,family:'Tajawal'}}, grid:{display:false}, border:{color:gc} },
+        y:{ min:5, max:8, ticks:{color:tc,font:{size:11,family:'Tajawal'},callback:v=>v+' م.ج'}, grid:{color:gc}, border:{display:false} }
+      }
+    }
+  });
+</script>
+</body></html>

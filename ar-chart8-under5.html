@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>مؤشرات سوء التغذية دون الخامسة</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--font:'Tajawal',sans-serif;--coral:#D85A30;--amber:#BA7517;--blue:#378ADD;--gray:#888780;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--font);direction:rtl;background:#fff;color:#2c2c2a;padding:20px 24px 16px;overflow:hidden;}
+  .header{border-right:3px solid var(--coral);padding-right:12px;margin-bottom:12px;opacity:0;transform:translateX(16px);animation:slideIn .5s ease forwards;}
+  .tag{font-size:10px;font-weight:700;letter-spacing:.07em;color:var(--gray);margin-bottom:3px;}
+  .title{font-size:16px;font-weight:700;line-height:1.4;margin-bottom:2px;}
+  .subtitle{font-size:12px;color:#5f5e5a;}
+  .callout{background:#f1efe8;border-right:3px solid var(--coral);padding:8px 12px;font-size:12px;color:#5f5e5a;line-height:1.6;margin:12px 0;font-style:italic;opacity:0;transform:translateY(10px);animation:fadeUp .5s .15s ease forwards;}
+  .headline{text-align:center;background:#fcebeb;border-radius:8px;padding:10px;margin-bottom:12px;opacity:0;transform:translateY(10px);animation:fadeUp .5s .25s ease forwards;}
+  .hn{font-size:28px;font-weight:700;color:var(--coral);}
+  .ht{font-size:12px;color:#5f5e5a;margin-top:2px;}
+  .chart-wrap{position:relative;width:100%;height:195px;opacity:0;transform:translateY(10px);animation:fadeUp .6s .4s ease forwards;}
+  .source{font-size:10px;color:var(--gray);margin-top:10px;text-align:right;opacity:0;transform:translateY(8px);animation:fadeUp .4s .8s ease forwards;}
+  @keyframes slideIn{to{opacity:1;transform:translateX(0);}}
+  @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+  @media(prefers-color-scheme:dark){body{background:#1a1a18;color:#d3d1c7;}.callout{background:#2c2c2a;color:#b4b2a9;}.headline{background:#2c2c2a;}.ht,.subtitle{color:#b4b2a9;}.source{color:#888780;}}
+</style>
+</head>
+<body>
+  <div class="header">
+    <p class="tag">زاوية ثالثة · إنفوجرافيك ٨ من ٨</p>
+    <p class="title">مؤشرات سوء التغذية بين الأطفال دون الخامسة (2021)</p>
+    <p class="subtitle">نسبة الانتشار — المسح الصحي للأسرة المصرية</p>
+  </div>
+  <div class="callout">"أكثر من 1 من كل 8 أطفال دون الخامسة يعاني من تقزم بسبب سوء التغذية"</div>
+  <div class="headline"><div class="hn">12.8%</div><div class="ht">معدل التقزم — أعلى المؤشرات</div></div>
+  <div class="chart-wrap"><canvas id="c" role="img" aria-label="أفقي: التقزم 12.8%، زيادة الوزن 11.5%، الهزال 3.1%">التقزم: 12.8%؛ زيادة الوزن: 11.5%؛ الهزال: 3.1%</canvas></div>
+  <p class="source">المصدر: المسح الصحي للأسرة المصرية 2021 / الجهاز المركزي للتعبئة والإحصاء</p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+  const dk=matchMedia('(prefers-color-scheme:dark)').matches;
+  const tc=dk?'#b4b2a9':'#5f5e5a',gc=dk?'rgba(255,255,255,.08)':'rgba(0,0,0,.07)';
+  const coral=dk?'#F0997B':'#D85A30',amber=dk?'#FAC775':'#BA7517',blue=dk?'#85B7EB':'#378ADD';
+  new Chart(document.getElementById('c'),{
+    type:'bar',
+    data:{labels:['التقزم','زيادة الوزن','الهزال'],datasets:[{data:[12.8,11.5,3.1],backgroundColor:[coral,amber,blue],borderWidth:0,borderRadius:4}]},
+    options:{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      animation:{duration:1100,easing:'easeOutQuart',delay:ctx=>ctx.dataIndex*120},
+      plugins:{legend:{display:false},tooltip:{backgroundColor:dk?'#2c2c2a':'#fff',borderColor:dk?'rgba(255,255,255,.1)':'rgba(0,0,0,.08)',borderWidth:1,titleColor:dk?'#d3d1c7':'#2c2c2a',bodyColor:tc,titleFont:{family:'Tajawal'},bodyFont:{family:'Tajawal'},padding:10,callbacks:{label:ctx=>' نسبة الانتشار: '+ctx.raw+'%'}}},
+      scales:{
+        x:{max:18,ticks:{color:tc,font:{size:11,family:'Tajawal'},callback:v=>v+'%'},grid:{color:gc},border:{display:false}},
+        y:{position:'right',ticks:{color:tc,font:{size:12,family:'Tajawal'}},grid:{display:false},border:{display:false}}
+      }
+    }
+  });
+</script>
+</body></html>

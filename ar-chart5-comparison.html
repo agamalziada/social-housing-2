@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>نصيب الطالب السنوي: مقارنة</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--font:'Tajawal',sans-serif;--teal:#1D9E75;--coral:#D85A30;--gray:#888780;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--font);direction:rtl;background:#fff;color:#2c2c2a;padding:20px 24px 16px;overflow:hidden;}
+  .header{border-right:3px solid var(--teal);padding-right:12px;margin-bottom:12px;opacity:0;transform:translateX(16px);animation:slideIn .5s ease forwards;}
+  .tag{font-size:10px;font-weight:700;letter-spacing:.07em;color:var(--gray);margin-bottom:3px;}
+  .title{font-size:16px;font-weight:700;line-height:1.4;margin-bottom:2px;}
+  .subtitle{font-size:12px;color:#5f5e5a;}
+  .callout{background:#f1efe8;border-right:3px solid var(--teal);padding:8px 12px;font-size:12px;color:#5f5e5a;line-height:1.6;margin:12px 0;font-style:italic;opacity:0;transform:translateY(10px);animation:fadeUp .5s .15s ease forwards;}
+  .cards{display:flex;gap:12px;margin-bottom:14px;opacity:0;transform:translateY(10px);animation:fadeUp .5s .25s ease forwards;}
+  .card{flex:1;border-radius:10px;padding:12px 14px;}
+  .cy{font-size:12px;font-weight:600;margin-bottom:4px;}
+  .cv{font-size:28px;font-weight:700;line-height:1;}
+  .cu{font-size:11px;margin-top:3px;opacity:.8;}
+  .badge{text-align:center;padding:8px;border-radius:8px;font-size:14px;font-weight:700;color:var(--coral);background:#faece7;margin-bottom:12px;opacity:0;transform:translateY(8px);animation:fadeUp .4s .35s ease forwards;}
+  .chart-wrap{position:relative;width:100%;height:190px;opacity:0;transform:translateY(10px);animation:fadeUp .6s .45s ease forwards;}
+  .source{font-size:10px;color:var(--gray);margin-top:10px;text-align:right;opacity:0;transform:translateY(8px);animation:fadeUp .4s .8s ease forwards;}
+  @keyframes slideIn{to{opacity:1;transform:translateX(0);}}
+  @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+  @media(prefers-color-scheme:dark){body{background:#1a1a18;color:#d3d1c7;}.callout{background:#2c2c2a;color:#b4b2a9;}.badge{background:#2c2c2a;}.subtitle,.source{color:#b4b2a9;}}
+</style>
+</head>
+<body>
+  <div class="header">
+    <p class="tag">زاوية ثالثة · إنفوجرافيك ٥ من ٨</p>
+    <p class="title">نصيب الطالب السنوي من المخصصات: 2023 مقابل 2024</p>
+    <p class="subtitle">جنيه / طالب / عام دراسي كامل</p>
+  </div>
+  <div class="callout">"نصيب الطالب تراجع بـ27 جنيهاً في سنة واحدة رغم موجات التضخم"</div>
+  <div class="cards">
+    <div class="card" style="background:#e1f5ee;">
+      <div class="cy" style="color:#0F6E56;">العام الدراسي 2023</div>
+      <div class="cv" style="color:#0F6E56;" id="v1">0</div>
+      <div class="cu" style="color:#0F6E56;">جنيه / طالب</div>
+    </div>
+    <div class="card" style="background:#faece7;">
+      <div class="cy" style="color:#993C1D;">العام الدراسي 2024</div>
+      <div class="cv" style="color:#993C1D;" id="v2">0</div>
+      <div class="cu" style="color:#993C1D;">جنيه / طالب</div>
+    </div>
+  </div>
+  <div class="badge">⬇ انخفاض بـ 27 جنيهاً (−5.5%) في عام واحد</div>
+  <div class="chart-wrap"><canvas id="c" role="img" aria-label="مقارنة نصيب الطالب: 494 جنيه في 2023، 467 جنيه في 2024">2023: 494 جنيه؛ 2024: 467 جنيه</canvas></div>
+  <p class="source">المصدر: موازنة المواطن 2024/2025</p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+  const dk=matchMedia('(prefers-color-scheme:dark)').matches;
+  const tc=dk?'#b4b2a9':'#5f5e5a',gc=dk?'rgba(255,255,255,.08)':'rgba(0,0,0,.07)';
+  const teal=dk?'#5DCAA5':'#1D9E75',coral=dk?'#F0997B':'#D85A30';
+
+  /* count-up */
+  let s=null;
+  function cu(ts){if(!s)s=ts;const p=Math.min((ts-s)/900,1),e=1-Math.pow(1-p,3);document.getElementById('v1').textContent=Math.round(e*494);document.getElementById('v2').textContent=Math.round(e*467);if(p<1)requestAnimationFrame(cu);}
+  setTimeout(()=>requestAnimationFrame(cu),280);
+
+  new Chart(document.getElementById('c'),{
+    type:'bar',
+    data:{labels:['2023','2024'],datasets:[{data:[494,467],backgroundColor:[teal,coral],borderWidth:0,borderRadius:6}]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      animation:{duration:1000,easing:'easeOutQuart'},
+      plugins:{legend:{display:false},tooltip:{backgroundColor:dk?'#2c2c2a':'#fff',borderColor:dk?'rgba(255,255,255,.1)':'rgba(0,0,0,.08)',borderWidth:1,titleColor:dk?'#d3d1c7':'#2c2c2a',bodyColor:tc,titleFont:{family:'Tajawal'},bodyFont:{family:'Tajawal'},padding:10,callbacks:{label:ctx=>ctx.raw+' جنيه / طالب / عام'}}},
+      scales:{
+        x:{ticks:{color:tc,font:{size:13,family:'Tajawal',weight:'700'}},grid:{display:false},border:{color:gc}},
+        y:{min:440,max:520,ticks:{color:tc,font:{size:11,family:'Tajawal'},callback:v=>v+' ج'},grid:{color:gc},border:{display:false}}
+      }
+    }
+  });
+</script>
+</body></html>

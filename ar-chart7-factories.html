@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>توزيع مصانع التغذية المدرسية</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--font:'Tajawal',sans-serif;--teal:#1D9E75;--blue:#378ADD;--gray:#888780;--coral:#D85A30;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--font);direction:rtl;background:#fff;color:#2c2c2a;padding:20px 24px 16px;overflow:hidden;}
+  .header{border-right:3px solid var(--teal);padding-right:12px;margin-bottom:12px;opacity:0;transform:translateX(16px);animation:slideIn .5s ease forwards;}
+  .tag{font-size:10px;font-weight:700;letter-spacing:.07em;color:var(--gray);margin-bottom:3px;}
+  .title{font-size:16px;font-weight:700;line-height:1.4;margin-bottom:2px;}
+  .subtitle{font-size:12px;color:#5f5e5a;}
+  .callout{background:#f1efe8;border-right:3px solid var(--teal);padding:8px 12px;font-size:12px;color:#5f5e5a;line-height:1.6;margin:12px 0;font-style:italic;opacity:0;transform:translateY(10px);animation:fadeUp .5s .15s ease forwards;}
+  .chart-body{display:flex;align-items:center;gap:20px;flex-wrap:wrap;opacity:0;transform:translateY(10px);animation:fadeUp .6s .3s ease forwards;}
+  .donut-wrap{position:relative;width:190px;height:190px;flex-shrink:0;}
+  .legend{display:flex;flex-direction:column;gap:14px;flex:1;min-width:130px;}
+  .li{display:flex;align-items:center;gap:10px;}
+  .ld{width:12px;height:12px;border-radius:2px;flex-shrink:0;}
+  .ll{font-size:12px;color:#5f5e5a;}
+  .lv{font-size:20px;font-weight:700;}
+  .warn{background:#faece7;border-right:3px solid var(--coral);padding:8px 12px;font-size:11px;color:#993C1D;line-height:1.6;margin-top:12px;opacity:0;transform:translateY(8px);animation:fadeUp .4s .8s ease forwards;}
+  .source{font-size:10px;color:var(--gray);margin-top:10px;text-align:right;opacity:0;transform:translateY(8px);animation:fadeUp .4s .9s ease forwards;}
+  @keyframes slideIn{to{opacity:1;transform:translateX(0);}}
+  @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+  @media(prefers-color-scheme:dark){body{background:#1a1a18;color:#d3d1c7;}.callout{background:#2c2c2a;color:#b4b2a9;}.ll,.subtitle{color:#b4b2a9;}.warn{background:#2c2c2a;color:#F0997B;}.source{color:#888780;}}
+</style>
+</head>
+<body>
+  <div class="header">
+    <p class="tag">زاوية ثالثة · إنفوجرافيك ٧ من ٨</p>
+    <p class="title">توزيع مصانع التغذية المدرسية جغرافياً (16 مصنعاً)</p>
+    <p class="subtitle">توزيع المصانع حسب المنطقة الجغرافية</p>
+  </div>
+  <div class="callout">"نصف المصانع في الدلتا — لكن أحد العاملين يؤكد أن مصنع أسوان متوقف منذ عامين"</div>
+  <div class="chart-body">
+    <div class="donut-wrap"><canvas id="c" role="img" aria-label="دائري: الوجه البحري 8، الوجه القبلي 7، شمال سيناء 1">الوجه البحري: 8؛ الوجه القبلي: 7؛ شمال سيناء: 1</canvas></div>
+    <div class="legend" id="leg"></div>
+  </div>
+  <div class="warn">⚠ بلاغات من عاملين تشير إلى توقف مصنع أسوان منذ أكثر من عامين دون تأكيد رسمي.</div>
+  <p class="source">المصدر: البورصة نيوز / بيانات وزارة الزراعة</p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+  const dk=matchMedia('(prefers-color-scheme:dark)').matches;
+  const teal=dk?'#5DCAA5':'#1D9E75',blue=dk?'#85B7EB':'#378ADD',gray=dk?'#B4B2A9':'#888780';
+  const labels=['الوجه البحري','الوجه القبلي','شمال سيناء'],values=[8,7,1],pcts=['50%','43.75%','6.25%'],colors=[teal,blue,gray];
+  new Chart(document.getElementById('c'),{
+    type:'doughnut',
+    data:{labels,datasets:[{data:values,backgroundColor:colors,borderWidth:3,borderColor:dk?'#1a1a18':'#fff',hoverOffset:8}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:{animateRotate:true,animateScale:true,duration:1200,easing:'easeOutQuart'},plugins:{legend:{display:false},tooltip:{backgroundColor:dk?'#2c2c2a':'#fff',borderColor:dk?'rgba(255,255,255,.1)':'rgba(0,0,0,.08)',borderWidth:1,titleColor:dk?'#d3d1c7':'#2c2c2a',bodyColor:dk?'#b4b2a9':'#5f5e5a',titleFont:{family:'Tajawal'},bodyFont:{family:'Tajawal'},padding:10,callbacks:{label:ctx=>' '+ctx.label+': '+ctx.raw+' مصانع ('+pcts[ctx.dataIndex]+')'}}},cutout:'60%'}
+  });
+  const leg=document.getElementById('leg');
+  labels.forEach((l,i)=>{leg.innerHTML+=`<div class="li"><span class="ld" style="background:${colors[i]}"></span><div><div class="ll">${l}</div><div class="lv" style="color:${colors[i]}">${values[i]} مصانع</div></div></div>`;});
+</script>
+</body></html>
